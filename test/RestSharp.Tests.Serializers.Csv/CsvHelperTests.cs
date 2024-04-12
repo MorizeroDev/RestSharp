@@ -1,11 +1,11 @@
 using CsvHelper.Configuration;
 using RestSharp.Serializers.CsvHelper;
-using RestSharp.Serializers.Json;
 using RestSharp.Tests.Shared.Extensions;
 using RestSharp.Tests.Shared.Fixtures;
 using System.Globalization;
 using System.Net;
 using System.Text;
+using RestSharp.Serializers.NewtonsoftJson;
 
 namespace RestSharp.Tests.Serializers.Csv;
 
@@ -104,7 +104,7 @@ public class CsvHelperTests {
 
         using var server = HttpServerFixture.StartServer(
             (_, response) => {
-                var serializer = new SystemTextJsonSerializer();
+                var serializer = new JsonNetSerializer();
 
                 response.StatusCode      = (int)HttpStatusCode.OK;
                 response.ContentType     = "text/csv";
@@ -113,7 +113,7 @@ public class CsvHelperTests {
             }
         );
 
-        var client = new RestClient(server.Url, configureSerialization: cfg => cfg.UseSystemTextJson());
+        var client = new RestClient(server.Url, configureSerialization: cfg => cfg.UseNewtonsoftJson());
 
         var response = await client.ExecuteAsync<TestObject>(new RestRequest());
 
