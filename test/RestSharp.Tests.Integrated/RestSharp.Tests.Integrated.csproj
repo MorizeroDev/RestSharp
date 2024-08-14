@@ -18,6 +18,7 @@
         <PackageReference Include="Polly"/>
         <PackageReference Include="PolySharp" PrivateAssets="All"/>
         <PackageReference Include="WireMock.Net"/>
+        <PackageReference Include="System.Text.Json"/>
     </ItemGroup>
     <ItemGroup>
         <Using Include="WireMock"/>

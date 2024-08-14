@@ -13,7 +13,6 @@
 // limitations under the License.
 //
 
-using RestSharp.Serializers.Json;
 using RestSharp.Serializers.Xml;
 
 namespace RestSharp.Serializers;
@@ -37,7 +36,6 @@ public class SerializerConfig {
         return this;
     }
 
-    public void UseDefaultSerializers() => UseSerializer<SystemTextJsonSerializer>().UseSerializer<XmlRestSerializer>();
 
     /// <summary>
     /// Replace the default serializer with a custom one

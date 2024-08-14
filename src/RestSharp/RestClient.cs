@@ -267,7 +267,6 @@ public partial class RestClient : IRestClient {
     [MemberNotNull(nameof(AcceptedContentTypes))]
     void ConfigureSerializers(ConfigureSerialization? configureSerialization) {
         var serializerConfig = new SerializerConfig();
-        serializerConfig.UseDefaultSerializers();
         configureSerialization?.Invoke(serializerConfig);
         Serializers          = new(serializerConfig);
         AcceptedContentTypes = Serializers.GetAcceptedContentTypes();
