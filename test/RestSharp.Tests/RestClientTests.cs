@@ -1,5 +1,5 @@
 using RestSharp.Serializers;
-using RestSharp.Serializers.Json;
+using RestSharp.Serializers.NewtonsoftJson;
 
 namespace RestSharp.Tests;
 
@@ -96,7 +96,7 @@ public class RestClientTests {
         var baseUrl = new Uri(BaseUrl);
 
         // act
-        using var client = new RestClient(baseUrl, configureSerialization: cfg => cfg.UseOnlySerializer(() => new SystemTextJsonSerializer()));
+        using var client = new RestClient(baseUrl, configureSerialization: cfg => cfg.UseOnlySerializer(() => new JsonNetSerializer()));
 
         // assert
         client.Serializers.Serializers.Should().HaveCount(1);

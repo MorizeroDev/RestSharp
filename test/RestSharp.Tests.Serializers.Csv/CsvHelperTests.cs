@@ -1,7 +1,7 @@
 using CsvHelper.Configuration;
 using RestSharp.Serializers.CsvHelper;
-using RestSharp.Serializers.Json;
 using System.Globalization;
+using RestSharp.Serializers.NewtonsoftJson;
 
 namespace RestSharp.Tests.Serializers.Csv;
 
@@ -59,7 +59,7 @@ public sealed class CsvHelperTests : IDisposable {
         var item = Fixture.Create<TestObject>();
         ConfigureResponse(item);
 
-        using var client = new RestClient(_server.Url!, configureSerialization: cfg => cfg.UseSystemTextJson());
+        using var client = new RestClient(_server.Url!, configureSerialization: cfg => cfg.UseNewtonsoftJson());
 
         var response = await client.ExecuteAsync<TestObject>(new RestRequest());
         response.IsSuccessStatusCode.Should().BeTrue();
