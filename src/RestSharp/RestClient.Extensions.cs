@@ -12,7 +12,6 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License. 
 
-using System.Runtime.CompilerServices;
 using RestSharp.Extensions;
 
 namespace RestSharp;
@@ -144,43 +143,5 @@ public static partial class RestClientExtensions {
         /// <param name="request">Pre-configured request instance.</param>
         /// <returns>The downloaded file.</returns>
         public byte[]? DownloadData(RestRequest request) => AsyncHelpers.RunSync(() => client.DownloadDataAsync(request));
-
-        /// <summary>
-        /// Reads a stream returned by the specified endpoint, deserializes each line to JSON and returns each object asynchronously.
-        /// It is required for each JSON object to be returned in a single line.
-        /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="cancellationToken"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        [PublicAPI]
-        public async IAsyncEnumerable<T> StreamJsonAsync<T>(
-            string                                     resource,
-            [EnumeratorCancellation] CancellationToken cancellationToken
-        ) {
-            var request = new RestRequest(resource);
-
-#if NET
-        await using var stream = await client.DownloadStreamAsync(request, cancellationToken).ConfigureAwait(false);
-#else
-            using var stream = await client.DownloadStreamAsync(request, cancellationToken).ConfigureAwait(false);
-#endif
-            if (stream == null) yield break;
-
-            var serializer = client.Serializers.GetSerializer(DataFormat.Json);
-
-            using var reader = new StreamReader(stream);
-
-#if NET7_0_OR_GREATER
-            while (await reader.ReadLineAsync(cancellationToken) is { } line && !cancellationToken.IsCancellationRequested) {
-#else
-            while (await reader.ReadLineAsync() is { } line && !cancellationToken.IsCancellationRequested) {
-#endif
-                if (string.IsNullOrWhiteSpace(line)) continue;
-
-                var response = new RestResponse(request) { Content = line };
-                yield return serializer.Deserializer.Deserialize<T>(response)!;
-            }
-        }
     }
 }

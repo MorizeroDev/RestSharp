@@ -3,10 +3,6 @@
 
 using var client = new TwitterClient("apikey", "apisecret");
 
-await foreach (var tweet in client.SearchStream()) {
-    Console.WriteLine(tweet);
-}
-
 return;
 
 #pragma warning disable CS0162 // Unreachable code detected
